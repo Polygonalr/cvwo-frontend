@@ -1,11 +1,27 @@
 import BasicList from '../components/BasicList';
+import LoginModal from '../components/LoginModal';
 import React, { useState } from 'react';
 import Typewriter from 'typewriter-effect';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+const isLoggedIn = async () => {
+    return fetch(`http://localhost:3001/api/user_data`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    }).then((resp) => resp.json());
+};
 
 const Home: React.FC = () => {
     const [isShowButton, setIsShowButton] = useState(false);
+    const [isShowLoginModal, setShowLoginModal] = useState(true);
+
+    // if (user.initialised === false) {
+
+    // }
 
     const hideButton = () => {
         setIsShowButton(false);
@@ -13,6 +29,10 @@ const Home: React.FC = () => {
 
     const showButton = () => {
         setIsShowButton(true);
+    };
+
+    const hideLoginModal = () => {
+        setShowLoginModal(false);
     };
 
     return (
@@ -38,6 +58,7 @@ const Home: React.FC = () => {
                     {'Yes'}
                 </Button>
             )}
+            <LoginModal open={isShowLoginModal} setOpen={setShowLoginModal} />
         </>
     );
 };
