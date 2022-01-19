@@ -1,5 +1,6 @@
 import Home from './pages/Home';
 import StyledPage from './pages/StyledPage';
+import Snackbar from './components/SnackBar';
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -17,6 +18,7 @@ const App: React.FC = () => {
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
+                <Snackbar />
                 <BrowserRouter>
                     <Routes>
                         <Route path="/styled" element={<StyledPage />} />

@@ -1,41 +1,43 @@
+import { fetchUserAction, submitCredentialsAction } from '../state/actions/userActions';
+import { useAppSelector } from '../state/hooks';
 import { Button, Modal, Paper, FormControl, Stack, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect, Dispatch, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-const submitCredentials = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    const credentials = {
-        username: e.currentTarget.username.value,
-        password: e.currentTarget.password.value,
+import type { RootState } from '../state/store';
+
+// const useLoginHandler = (username: string, password: string, submitted: boolean) => {
+//     const dispatch = useDispatch();
+//     const isLoading = useAppSelector((state) => state.user.userReducer.isLoading);
+//     // it is better to put the dispatch inside a useEffect rather than outside
+//     useEffect(() => {
+//         if (!submitted) {
+//             return;
+//         }
+//         dispatch(setAuthenticatedTest());
+//     }, [username, password, submitted]);
+
+//     if (isLoading) {
+//         console.log('please wait');
+//     }
+// };
+
+const LoginModal: React.FC = () => {
+    const dispatch = useDispatch();
+    const [submitted, setSubmitted] = useState(false);
+
+    const submitCredentials = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+        const credentials = {
+            username: e.currentTarget.username.value,
+            password: e.currentTarget.password.value,
+        };
+        dispatch(submitCredentialsAction(credentials.username, credentials.password));
     };
-
-    (async () => {
-        await fetch(`http://localhost:3001/api/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                localStorage.setItem('token', data.jwt);
-            });
-    })();
-};
-
-const LoginModal: React.FC<{
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ open, setOpen }) => {
-    // const [open, setOpen] = React.useState(true);
-    const handleClose = () => setOpen(false);
     return (
-        <Modal
-            open={open}
-            // onClose={handleClose}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
+        <Modal open={true} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Paper elevation={3} style={{ padding: '50px' }}>
                 <form id="loginForm" onSubmit={submitCredentials}>
                     <Stack spacing={2}>

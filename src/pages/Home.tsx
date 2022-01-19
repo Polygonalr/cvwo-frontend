@@ -1,23 +1,19 @@
 import BasicList from '../components/BasicList';
 import LoginModal from '../components/LoginModal';
-import React, { useState } from 'react';
+import { fetchUserAction } from '../state/actions/userActions';
+import { showSuccessSnackbar } from '../state/actions/uiActions';
+import { useAppSelector } from '../state/hooks';
+import { User } from '../state/types/userTypes';
+import ButtonAppBar from '../components/Navbar';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import Typewriter from 'typewriter-effect';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-
-const isLoggedIn = async () => {
-    return fetch(`http://localhost:3001/api/user_data`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-    }).then((resp) => resp.json());
-};
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home: React.FC = () => {
     const [isShowButton, setIsShowButton] = useState(false);
-    const [isShowLoginModal, setShowLoginModal] = useState(true);
+    const [isShowLoginModal, setShowLoginModal] = useState(false);
 
     // if (user.initialised === false) {
 
@@ -35,8 +31,26 @@ const Home: React.FC = () => {
         setShowLoginModal(false);
     };
 
+    const user = useAppSelector((state) => state.user.userReducer);
+
+    useEffect(() => {
+        if (!user.isAuthenticated && !user.isLoading) {
+            setShowLoginModal(true);
+        } else {
+            setShowLoginModal(false);
+        }
+    }, [user.isAuthenticated, user.isLoading]);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchUserAction());
+    }, [dispatch]);
+
+    const loginModal = isShowLoginModal ? <LoginModal /> : null;
+
     return (
         <>
+            <ButtonAppBar />
             <h3>{"Welcome to CVWO's sample react app! Here's a basic list for you to experiment with."}</h3>
             <br />
             <BasicList />
@@ -58,7 +72,10 @@ const Home: React.FC = () => {
                     {'Yes'}
                 </Button>
             )}
-            <LoginModal open={isShowLoginModal} setOpen={setShowLoginModal} />
+            <Button variant="contained" color="primary" onClick={() => dispatch(showSuccessSnackbar('Test'))}>
+                {'testdispatch'}
+            </Button>
+            {loginModal}
         </>
     );
 };
