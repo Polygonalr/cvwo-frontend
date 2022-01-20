@@ -26,7 +26,6 @@ import type { RootState } from '../state/store';
 
 const LoginModal: React.FC = () => {
     const dispatch = useDispatch();
-    const [submitted, setSubmitted] = useState(false);
 
     const submitCredentials = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();

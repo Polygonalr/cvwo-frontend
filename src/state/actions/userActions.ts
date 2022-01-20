@@ -4,7 +4,6 @@ import * as client from '../../api/client';
 import { RootState } from '../../state/store';
 // eslint-disable-next-line import/named
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line import/named
 import { AnyAction } from 'redux';
 

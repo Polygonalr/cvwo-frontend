@@ -1,11 +1,10 @@
-// components/SuccessSnackbar.js or whatever you wanna call it
+// TODO: TBH I should use react-toastify for this instead of mui's snackbar. Time is not a luxury here.
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { clearSnackbar } from '../state/actions/uiActions';
 import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 // eslint-disable-next-line import/named
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import React from 'react';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {

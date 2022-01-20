@@ -1,15 +1,16 @@
 import BasicList from '../components/BasicList';
 import LoginModal from '../components/LoginModal';
+import LoadingModal from '../components/LoadingModal';
 import { fetchUserAction } from '../state/actions/userActions';
+import { fetchTasksAction, addTaskAction } from '../state/actions/taskActions';
 import { showSuccessSnackbar } from '../state/actions/uiActions';
 import { useAppSelector } from '../state/hooks';
-import { User } from '../state/types/userTypes';
 import ButtonAppBar from '../components/Navbar';
-import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typewriter from 'typewriter-effect';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const Home: React.FC = () => {
     const [isShowButton, setIsShowButton] = useState(false);
@@ -32,6 +33,7 @@ const Home: React.FC = () => {
     };
 
     const user = useAppSelector((state) => state.user.userReducer);
+    const tasks = useAppSelector((state) => state.tasks.taskReducer);
 
     useEffect(() => {
         if (!user.isAuthenticated && !user.isLoading) {
@@ -40,6 +42,12 @@ const Home: React.FC = () => {
             setShowLoginModal(false);
         }
     }, [user.isAuthenticated, user.isLoading]);
+
+    useEffect(() => {
+        if (user.isAuthenticated || tasks.fetched) {
+            dispatch(fetchTasksAction());
+        }
+    }, [user.isAuthenticated, tasks.fetched]);
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -72,10 +80,15 @@ const Home: React.FC = () => {
                     {'Yes'}
                 </Button>
             )}
-            <Button variant="contained" color="primary" onClick={() => dispatch(showSuccessSnackbar('Test'))}>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => dispatch(addTaskAction('title2 test', 'description 2 test'))}
+            >
                 {'testdispatch'}
             </Button>
             {loginModal}
+            <LoadingModal />
         </>
     );
 };
