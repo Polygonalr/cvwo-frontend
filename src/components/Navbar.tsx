@@ -16,7 +16,7 @@ export default function ButtonAppBar() {
                         <AddBoxIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        {'News'}
+                        {'Task Management System'}
                     </Typography>
                 </Toolbar>
             </AppBar>

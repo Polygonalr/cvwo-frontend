@@ -1,4 +1,4 @@
-import BasicList from '../components/BasicList';
+import CategorisedList from '../components/CategorisedList';
 import LoginModal from '../components/LoginModal';
 import LoadingModal from '../components/LoadingModal';
 import { fetchUserAction } from '../state/actions/userActions';
@@ -51,6 +51,9 @@ const Home: React.FC = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
+        if (localStorage.getItem('token') == 'undefined') {
+            localStorage.removeItem('token');
+        }
         dispatch(fetchUserAction());
     }, [dispatch]);
 
@@ -59,34 +62,7 @@ const Home: React.FC = () => {
     return (
         <>
             <ButtonAppBar />
-            <h3>{"Welcome to CVWO's sample react app! Here's a basic list for you to experiment with."}</h3>
-            <br />
-            <BasicList />
-            <br />
-            <Typewriter
-                onInit={(typewriter) => {
-                    hideButton();
-                    typewriter
-                        .changeDelay(80)
-                        .pauseFor(1500)
-                        .typeString("It's a little plain isn't it?")
-                        .callFunction(showButton)
-                        .start();
-                }}
-            />
-            <br />
-            {isShowButton && (
-                <Button variant="contained" color="primary" component={Link} to="/styled">
-                    {'Yes'}
-                </Button>
-            )}
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => dispatch(addTaskAction('title2 test', 'description 2 test'))}
-            >
-                {'testdispatch'}
-            </Button>
+            <CategorisedList />
             {loginModal}
             <LoadingModal />
         </>

@@ -1,5 +1,7 @@
 const API_URL = 'http://localhost:3001/api';
 
+// ========================== USER ============================
+
 export const submitCredentials = async (username: string, password: string) => {
     const credentials = {
         username: username,
@@ -36,6 +38,8 @@ export const fetchUserData = async (accessToken: string) => {
     // await timeout(500);
     return user;
 };
+
+// ========================== TASKS ============================
 
 export const fetchTasks = async (accessToken: string) => {
     console.log('API: Fetching tasks');
@@ -92,6 +96,8 @@ export const updateTask = async (
     });
 };
 
+// ========================== TAGS AND COLORS ============================
+
 export const fetchTags = async (accessToken: string) => {
     console.log('API: Fetching tags');
     const tags = await fetch(API_URL + `/get_tags`, {
@@ -102,4 +108,16 @@ export const fetchTags = async (accessToken: string) => {
         },
     }).then((resp) => resp.json());
     return tags;
+};
+
+export const fetchColors = async (accessToken: string) => {
+    console.log('API: Fetching colors');
+    const colors = await fetch(API_URL + `/get_colors`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }).then((resp) => resp.json());
+    return colors;
 };

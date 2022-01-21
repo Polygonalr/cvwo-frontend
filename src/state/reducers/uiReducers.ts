@@ -2,10 +2,9 @@ import { UiState } from '../types/uiTypes';
 import { combineReducers } from 'redux';
 
 const initialState: UiState = {
-    successSnackbarOpen: false,
-    errorSnackbarOpen: false,
-    infoSnackbarOpen: false,
-    successSnackbarMessage: '',
+    snackbarOpen: false,
+    snackbarType: 'success',
+    snackbarMessage: '',
 };
 
 const uiReducer = (state: UiState = initialState, action: any) => {
@@ -13,15 +12,21 @@ const uiReducer = (state: UiState = initialState, action: any) => {
         case 'SNACKBAR_SUCCESS':
             return {
                 ...state,
-                successSnackbarOpen: true,
-                successSnackbarMessage: action.message,
+                snackbarOpen: true,
+                snackbarType: 'success',
+                snackbarMessage: action.message,
+            };
+        case 'SNACKBAR_ERROR':
+            return {
+                ...state,
+                snackbarOpen: true,
+                snackbarType: 'error',
+                snackbarMessage: action.message,
             };
         case 'SNACKBAR_CLEAR':
             return {
                 ...state,
-                successSnackbarOpen: false,
-                errorSnackbarOpen: false,
-                infoSnackbarOpen: false,
+                snackbarOpen: false,
             };
         default:
             return state;

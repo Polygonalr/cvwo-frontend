@@ -1,6 +1,5 @@
 export interface UiState {
-    successSnackbarOpen: boolean,
-    errorSnackbarOpen: boolean,
-    infoSnackbarOpen: boolean,
-    successSnackbarMessage: string,
+    snackbarOpen: boolean;
+    snackbarType: string;
+    snackbarMessage: string;
 }
