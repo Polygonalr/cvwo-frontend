@@ -18,7 +18,7 @@ export const taskReducer = (state: TaskState = initialState, action: any) => {
         case 'FETCH_TASKS_SUCCESS': {
             return {
                 ...state,
-                user: action.payload,
+                tasks: action.payload,
                 isAuthenticated: true,
                 isLoading: false,
             };
