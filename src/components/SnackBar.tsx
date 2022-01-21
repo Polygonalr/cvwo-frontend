@@ -21,9 +21,13 @@ export default function SuccessSnackbar() {
     }
 
     return (
-        <Snackbar open={snackbarState.successSnackbarOpen} autoHideDuration={3000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                {snackbarState.successSnackbarMessage}
+        <Snackbar open={snackbarState.snackbarOpen} autoHideDuration={3000} onClose={handleClose}>
+            <Alert
+                onClose={handleClose}
+                severity={snackbarState.snackbarType == 'success' ? 'success' : 'error'}
+                sx={{ width: '100%' }}
+            >
+                {snackbarState.snackbarMessage}
             </Alert>
         </Snackbar>
     );

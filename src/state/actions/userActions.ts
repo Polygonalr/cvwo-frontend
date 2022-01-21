@@ -1,4 +1,4 @@
-import { showSuccessSnackbar } from './uiActions';
+import { showErrorSnackbar, showSuccessSnackbar } from './uiActions';
 import { User } from '../types/userTypes';
 import * as client from '../../api/client';
 import { RootState } from '../../state/store';
@@ -65,8 +65,13 @@ export const submitCredentialsAction = (
             dispatch(fetchUserStart());
             console.log('Fetching in progress');
             client.submitCredentials(username, password).then((userData) => {
-                dispatch(fetchUserSuccess(userData));
-                dispatch(showSuccessSnackbar('Successfully logged in as ' + userData.username + '!'));
+                if (userData === undefined) {
+                    dispatch(fetchUserFailure('Username or password is incorrect.'));
+                    dispatch(showErrorSnackbar('Username or password is incorrect.'));
+                } else {
+                    dispatch(fetchUserSuccess(userData));
+                    dispatch(showSuccessSnackbar('Successfully logged in as ' + userData.username + '!'));
+                }
                 resolve();
             });
         });
