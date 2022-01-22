@@ -19,3 +19,15 @@ export const clearSnackbar = () => {
         dispatch({ type: 'SNACKBAR_CLEAR' });
     };
 };
+
+export const openModal = (modal: string) => {
+    return (dispatch: AppDispatch) => {
+        dispatch({ type: 'OPEN_MODAL', modal });
+    };
+};
+
+export const closeModal = () => {
+    return (dispatch: AppDispatch) => {
+        dispatch({ type: 'OPEN_MODAL', modal: '' });
+    };
+};

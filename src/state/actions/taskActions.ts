@@ -1,4 +1,6 @@
+import { showSuccessSnackbar, closeModal } from './uiActions';
 import { Task } from '../types/taskTypes';
+import { Tag } from '../types/tagTypes';
 import * as client from '../../api/client';
 import { RootState } from '../../state/store';
 // eslint-disable-next-line import/named
@@ -20,17 +22,22 @@ export const fetchTasksFailure = (error: string) => ({
     payload: error,
 });
 
+export const selectTask = (taskId: number) => ({
+    type: 'SELECT_TASK',
+    payload: taskId,
+});
+
 export const fetchTasksAction = (): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // Invoke API
     // TODO: Add error handling - 403 should be handled by bringing up the login prompt again
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
         if (localStorage.getItem('token') !== null) {
-            if (getState().tasks.taskReducer.isLoading) {
-                console.log('Already fetched tasks!');
-                return new Promise<void>((resolve) => {
-                    resolve();
-                });
-            }
+            // if (getState().tasks.taskReducer.isLoading) {
+            //     console.log('Already fetched tasks!');
+            //     return new Promise<void>((resolve) => {
+            //         resolve();
+            //     });
+            // }
             const accessToken = localStorage.getItem('token') || '';
             return new Promise<void>((resolve) => {
                 dispatch(fetchTasksStart());
@@ -60,8 +67,10 @@ export const addTaskAction = (
                 dispatch(fetchTasksStart());
                 console.log('Adding task in progress');
                 client.addTask(accessToken, title, description).then((tasks) => {
-                    dispatch(fetchTaskSuccess(tasks));
+                    // dispatch(fetchTaskSuccess(tasks));
+                    dispatch(showSuccessSnackbar('Task added!'));
                     dispatch(fetchTasksAction());
+                    dispatch(closeModal());
                     resolve();
                 });
             });
@@ -70,5 +79,20 @@ export const addTaskAction = (
                 resolve();
             });
         }
+    };
+};
+
+export const updateTaskAction = (
+    taskId: number,
+    title: string,
+    description: string,
+    status: number,
+    tags: Tag[],
+): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
+    // TODO - Implement the API in ruby first before coming back here
+    return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
+        return new Promise<void>((resolve) => {
+            resolve();
+        });
     };
 };

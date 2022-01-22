@@ -1,6 +1,7 @@
 import userReducers from './reducers/userReducers';
 import uiReducers from './reducers/uiReducers';
 import taskReducers from './reducers/taskReducers';
+import tagReducers from './reducers/tagReducers';
 // eslint-disable-next-line import/named
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
@@ -10,6 +11,7 @@ export const store = configureStore({
         user: userReducers,
         ui: uiReducers,
         tasks: taskReducers,
+        tags: tagReducers,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
 });

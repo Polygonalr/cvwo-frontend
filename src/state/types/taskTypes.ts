@@ -6,11 +6,12 @@ export interface Task {
     description: string;
     status: number;
     user_id: number;
-    tags: number[];
+    tags: Tag[];
 }
 
 export interface TaskState {
     tasks: Task[];
     isLoading: boolean;
     fetched: boolean;
+    selectedTask: number;
 }

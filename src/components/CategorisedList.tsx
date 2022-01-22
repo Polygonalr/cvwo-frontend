@@ -1,7 +1,13 @@
-import TagChip from '../components/TagChip';
+import AddTaskModal from './taskmodals/AddTaskModal';
+import ViewTaskModal from './taskmodals/ViewTaskModal';
+import ViewTagsModal from './taskmodals/ViewTagsModal';
+import TagFlexBox from './TagFlexBox';
+import { selectTask } from '../state/actions/taskActions';
+import { openModal } from '../state/actions/uiActions';
 import { useAppSelector } from '../state/hooks';
 
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import '../App.css';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,30 +27,38 @@ const CardGroup = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.primary,
+    minHeight: '100%',
 }));
 
 const CardStack: React.FC<{ status: number }> = ({ status }) => {
+    const dispatch = useDispatch();
     const tasks = useAppSelector((state) => state.tasks.taskReducer.tasks);
     const filteredTasks = tasks.filter((task: Task) => task.status === status);
     const renderedTasks = filteredTasks.map((task: Task) => {
+        const openViewTaskModal = () => {
+            dispatch(openModal('viewTask'));
+            dispatch(selectTask(task.id));
+        };
         return (
-            <Card variant="outlined" key={task.id}>
+            <Card variant="outlined" key={task.id} onClick={openViewTaskModal}>
                 <CardActionArea>
                     <CardContent>
                         <Typography sx={{ fontSize: 16 }} color="text.secondary" align="left">
                             {'#' + task.id + ' ' + task.title}
                         </Typography>
                     </CardContent>
-                    <CardActions>
-                        <TagChip color="salmon" label="Kek" />
-                    </CardActions>
+                    {task.tags.length != 0 && (
+                        <CardActions>
+                            <TagFlexBox tags={task.tags} />
+                        </CardActions>
+                    )}
                 </CardActionArea>
             </Card>
         );
     });
     if (renderedTasks.length === 0) {
         return (
-            <Stack mt={2} pb={1}>
+            <Stack spacing={1} mt={2} pb={1}>
                 <Typography sx={{ fontSize: 16 }} color="text.secondary">
                     {'No tasks here!'}
                 </Typography>
@@ -52,7 +66,7 @@ const CardStack: React.FC<{ status: number }> = ({ status }) => {
         );
     }
     return (
-        <Stack mt={2} pb={1}>
+        <Stack spacing={1} mt={2} pb={1}>
             {renderedTasks}
         </Stack>
     );
@@ -62,7 +76,7 @@ const CategorisedList: React.FC = () => {
     return (
         <Container maxWidth="xl" style={{ height: '100%' }}>
             <Box sx={{ flex: 1, height: '100%' }} mt={2}>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ minHeight: '100%' }}>
                     <Grid item xs={4}>
                         <CardGroup>
                             <Typography variant="h5" component="div" mb={2}>
@@ -92,6 +106,9 @@ const CategorisedList: React.FC = () => {
                     </Grid>
                 </Grid>
             </Box>
+            <AddTaskModal />
+            <ViewTaskModal />
+            <ViewTagsModal />
         </Container>
     );
 };

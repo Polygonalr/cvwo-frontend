@@ -5,6 +5,7 @@ const initialState: TaskState = {
     tasks: [],
     isLoading: false,
     fetched: false,
+    selectedTask: 1,
 };
 
 export const taskReducer = (state: TaskState = initialState, action: any) => {
@@ -27,6 +28,12 @@ export const taskReducer = (state: TaskState = initialState, action: any) => {
             return {
                 ...state,
                 isLoading: false,
+            };
+        }
+        case 'SELECT_TASK': {
+            return {
+                ...state,
+                selectedTask: action.payload,
             };
         }
         default: {

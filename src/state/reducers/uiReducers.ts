@@ -5,6 +5,7 @@ const initialState: UiState = {
     snackbarOpen: false,
     snackbarType: 'success',
     snackbarMessage: '',
+    openModal: '',
 };
 
 const uiReducer = (state: UiState = initialState, action: any) => {
@@ -27,6 +28,11 @@ const uiReducer = (state: UiState = initialState, action: any) => {
             return {
                 ...state,
                 snackbarOpen: false,
+            };
+        case 'OPEN_MODAL':
+            return {
+                ...state,
+                openModal: action.modal,
             };
         default:
             return state;
