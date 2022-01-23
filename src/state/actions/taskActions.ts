@@ -91,8 +91,23 @@ export const updateTaskAction = (
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // TODO - Implement the API in ruby first before coming back here
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
-        return new Promise<void>((resolve) => {
-            resolve();
-        });
+        if (localStorage.getItem('token') !== null) {
+            const accessToken = localStorage.getItem('token') || '';
+            return new Promise<void>((resolve) => {
+                console.log('Updating task in progress');
+                const tag_ids = tags.map((tag) => tag.id);
+                client.updateTask(accessToken, taskId, title, description, status, tag_ids).then((tasks) => {
+                    // dispatch(fetchTaskSuccess(tasks));
+                    dispatch(showSuccessSnackbar('Task updated!'));
+                    dispatch(fetchTasksAction());
+                    dispatch(closeModal());
+                    resolve();
+                });
+            });
+        } else {
+            return new Promise<void>((resolve) => {
+                resolve();
+            });
+        }
     };
 };

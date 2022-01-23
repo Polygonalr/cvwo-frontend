@@ -78,16 +78,20 @@ export const updateTask = async (
     title: string,
     description: string,
     status: number,
+    tag_ids: number[],
 ) => {
     console.log('API: Updating task');
     const taskData = {
-        id: taskId,
-        title: title,
-        description: description,
-        status: status,
+        task: {
+            id: taskId,
+            title: title,
+            description: description,
+            status: status,
+            tag_ids: tag_ids,
+        },
     };
     await fetch(API_URL + `/update_task`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -108,6 +112,25 @@ export const fetchTags = async (accessToken: string) => {
         },
     }).then((resp) => resp.json());
     return tags;
+};
+
+export const addTag = async (accessToken: string, name: string, color: number) => {
+    console.log('API: Adding tag');
+    const tagData = {
+        tag: {
+            name: name,
+            color_id: color,
+        },
+    };
+    const new_tag = await fetch(API_URL + `/add_tag`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(tagData),
+    }).then((resp) => resp.json());
+    return new_tag.id;
 };
 
 export const fetchColors = async (accessToken: string) => {

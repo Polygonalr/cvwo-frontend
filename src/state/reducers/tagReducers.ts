@@ -3,7 +3,12 @@ import { combineReducers } from 'redux';
 
 const initialState: TagState = {
     tags: [],
-    colors: [],
+    colors: [
+        {
+            id: 1,
+            hex: '#ffffff',
+        },
+    ],
     isLoading: false,
     fetched: false,
 };

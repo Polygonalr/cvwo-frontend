@@ -6,6 +6,7 @@ export interface Task {
     description: string;
     status: number;
     user_id: number;
+    user: string;
     tags: Tag[];
 }
 

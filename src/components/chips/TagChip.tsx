@@ -20,6 +20,7 @@ const TagChip: React.FC<{ color: string; label: string }> = ({ color, label }) =
         root: {
             backgroundColor: color,
             color: textColor,
+            marginRight: '5px',
         },
     })(Chip);
 

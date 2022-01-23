@@ -1,3 +1,4 @@
+import { showSuccessSnackbar } from './uiActions';
 import { Tag, Color } from '../types/tagTypes';
 import * as client from '../../api/client';
 import { RootState } from '../store';
@@ -51,6 +52,31 @@ export const fetchTagsAction = (): ThunkAction<Promise<void>, RootState, unknown
                 console.log('Fetching tags in progress');
                 client.fetchTags(accessToken).then((tags) => {
                     dispatch(fetchTagsSuccess(tags));
+                    resolve();
+                });
+            });
+        } else {
+            return new Promise<void>((resolve) => {
+                resolve();
+            });
+        }
+    };
+};
+
+export const addTagAction = (
+    name: string,
+    color: number,
+): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
+    // Invoke API
+    return async (dispatch: AppDispatch, getState: () => RootState): Promise<void> => {
+        if (localStorage.getItem('token') !== null) {
+            const accessToken = localStorage.getItem('token') || '';
+            return new Promise<void>((resolve) => {
+                dispatch(fetchTagsStart());
+                console.log('Adding tag in progress');
+                client.addTag(accessToken, name, color).then((tags) => {
+                    dispatch(fetchTagsAction());
+                    dispatch(showSuccessSnackbar('Successfully added tag!'));
                     resolve();
                 });
             });
