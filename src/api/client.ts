@@ -37,7 +37,6 @@ export const fetchUserData = async (accessToken: string) => {
             Authorization: `Bearer ${accessToken}`,
         },
     }).then((resp) => resp.json());
-    // await timeout(500);
     return user;
 };
 
