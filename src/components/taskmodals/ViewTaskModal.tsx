@@ -6,6 +6,7 @@ import { Button, Modal, Paper, Box, Stack, Chip, Typography, Divider, IconButton
 import EditIcon from '@mui/icons-material/Edit';
 import LoopIcon from '@mui/icons-material/Loop';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -62,16 +63,27 @@ const ViewTaskModal: React.FC = () => {
                                     <EditIcon />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Send to In Progress">
-                                <IconButton aria-label="mark as in progress" onClick={handleSendToInProgress}>
-                                    <LoopIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Mark as done">
-                                <IconButton aria-label="mark as done" onClick={handleSendToDone}>
-                                    <CheckBoxIcon />
-                                </IconButton>
-                            </Tooltip>
+                            {selectedTask && selectedTask.status != 0 && (
+                                <Tooltip title="Mark as pending">
+                                    <IconButton aria-label="mark as pending" onClick={handleSendToPending}>
+                                        <PauseCircleOutlineIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            {selectedTask && selectedTask.status != 1 && (
+                                <Tooltip title="Send to In Progress">
+                                    <IconButton aria-label="mark as in progress" onClick={handleSendToInProgress}>
+                                        <LoopIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            {selectedTask && selectedTask.status != 2 && (
+                                <Tooltip title="Mark as done">
+                                    <IconButton aria-label="mark as done" onClick={handleSendToDone}>
+                                        <CheckBoxIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
                         </Stack>
                         <Divider />
                         <Stack direction="row" spacing={1} mt={2} mb={2}>

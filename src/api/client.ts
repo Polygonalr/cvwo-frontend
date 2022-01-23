@@ -1,3 +1,5 @@
+import { Task } from '../state/types/taskTypes';
+
 const API_URL = 'http://localhost:3001/api';
 
 // ========================== USER ============================
@@ -41,6 +43,17 @@ export const fetchUserData = async (accessToken: string) => {
 
 // ========================== TASKS ============================
 
+// TODO Implement this sort in backend instead
+const compareTasks = (a: Task, b: Task) => {
+    if (a.id < b.id) {
+        return -1;
+    }
+    if (a.id > b.id) {
+        return 1;
+    }
+    return 0;
+};
+
 export const fetchTasks = async (accessToken: string) => {
     console.log('API: Fetching tasks');
     const tasks = await fetch(API_URL + `/get_tasks`, {
@@ -50,6 +63,7 @@ export const fetchTasks = async (accessToken: string) => {
             Authorization: `Bearer ${accessToken}`,
         },
     }).then((resp) => resp.json());
+    tasks.sort(compareTasks);
     return tasks;
 };
 

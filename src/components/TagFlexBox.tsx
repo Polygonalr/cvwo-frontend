@@ -24,15 +24,22 @@ const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number }> = (
             </Box>
         );
     }
+    if (colors.length > 0) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }} mb={mb}>
+                {tags.map((tag: Tag) => (
+                    <TagChip
+                        color={colors.find((color: Color) => color.id == tag.color_id).hex}
+                        key={tag.id}
+                        label={tag.name}
+                    />
+                ))}
+            </Box>
+        );
+    }
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap' }} mb={mb}>
-            {tags.map((tag: Tag) => (
-                <TagChip
-                    color={colors.find((color: Color) => color.id == tag.color_id).hex}
-                    key={tag.id}
-                    label={tag.name}
-                />
-            ))}
+            {'Colors are still loading!'}
         </Box>
     );
 };
