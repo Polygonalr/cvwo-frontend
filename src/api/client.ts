@@ -66,12 +66,13 @@ export const fetchTasks = async (accessToken: string) => {
     return tasks;
 };
 
-export const addTask = async (accessToken: string, title: string, description: string) => {
+export const addTask = async (accessToken: string, title: string, description: string, tag_ids: number[]) => {
     console.log('API: Adding task');
     const taskData = {
         task: {
             title: title,
             description: description,
+            tag_ids: tag_ids,
         },
     };
     const new_task = await fetch(API_URL + `/add_task`, {

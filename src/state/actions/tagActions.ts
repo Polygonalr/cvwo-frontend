@@ -36,6 +36,11 @@ export const fetchColorsSuccess = (colors: Color[]) => ({
     payload: colors,
 });
 
+export const setSelectedTags = (tags: number[]) => ({
+    type: 'SET_SELECTED_TAGS',
+    payload: tags,
+});
+
 export const fetchTagsAction = (): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // Invoke API
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {

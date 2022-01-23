@@ -1,4 +1,5 @@
 import AddTaskModal from './taskmodals/AddTaskModal';
+import EditTaskModal from './taskmodals/EditTaskModal';
 import ViewTaskModal from './taskmodals/ViewTaskModal';
 import ViewTagsModal from './taskmodals/ViewTagsModal';
 import TagFlexBox from './TagFlexBox';
@@ -6,6 +7,7 @@ import { selectTask } from '../state/actions/taskActions';
 import { openModal } from '../state/actions/uiActions';
 import { useAppSelector } from '../state/hooks';
 
+import { setSelectedTags } from '../state/actions/tagActions';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../App.css';
@@ -35,8 +37,10 @@ const CardStack: React.FC<{ status: number }> = ({ status }) => {
     const tasks = useAppSelector((state) => state.tasks.taskReducer.tasks);
     const filteredTasks = tasks.filter((task: Task) => task.status === status);
     const renderedTasks = filteredTasks.map((task: Task) => {
+        const tag_ids = task.tags.map((tag) => tag.id);
         const openViewTaskModal = () => {
             dispatch(openModal('viewTask'));
+            dispatch(setSelectedTags(tag_ids));
             dispatch(selectTask(task.id));
         };
         return (
@@ -107,6 +111,7 @@ const CategorisedList: React.FC = () => {
                 </Grid>
             </Box>
             <AddTaskModal />
+            <EditTaskModal />
             <ViewTaskModal />
             <ViewTagsModal />
         </Container>

@@ -2,6 +2,7 @@ import { updateTaskAction } from '../../state/actions/taskActions';
 import { closeModal } from '../../state/actions/uiActions';
 import { Task } from '../../state/types/taskTypes';
 import { useAppSelector } from '../../state/hooks';
+import TagSelectorFlexBox from '../TagSelectorFlexBox';
 import { Button, Modal, Paper, FormControl, Stack, TextField, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,19 +10,19 @@ import { bindActionCreators } from 'redux';
 
 import type { RootState } from '../../state/store';
 
-const AddTaskModal: React.FC = () => {
+const EditTaskModal: React.FC = () => {
     const dispatch = useDispatch();
     const openModal = useAppSelector((state: RootState) => state.ui.uiReducer.openModal);
     const selectedTaskId = useAppSelector((state: RootState) => state.tasks.taskReducer.selectedTask);
     const selectedTask = useAppSelector((state: RootState) =>
         state.tasks.taskReducer.tasks.find((task: Task) => task.id == selectedTaskId),
     );
+    const selectedTags = useAppSelector((state: RootState) => state.tags.tagReducer.selectedTags);
 
     const [taskId, setTaskId] = useState(-1);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState(0);
-    const [tags, setTags] = useState([]);
 
     useEffect(() => {
         if (selectedTask) {
@@ -29,7 +30,6 @@ const AddTaskModal: React.FC = () => {
             setTitle(selectedTask.title);
             setDescription(selectedTask.description);
             setStatus(selectedTask.status);
-            setTags(selectedTask.tags);
         }
     }, [selectedTask]);
     const handleClose = () => {
@@ -39,7 +39,7 @@ const AddTaskModal: React.FC = () => {
 
     const submitTask = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        dispatch(updateTaskAction(taskId, title, description, status, tags));
+        dispatch(updateTaskAction(taskId, title, description, status, selectedTags));
     };
 
     const cleanFields = (): void => {
@@ -49,7 +49,7 @@ const AddTaskModal: React.FC = () => {
 
     return (
         <Modal
-            open={openModal == 'addTask' ? true : false}
+            open={openModal == 'editTask' ? true : false}
             onClose={handleClose}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
@@ -57,7 +57,8 @@ const AddTaskModal: React.FC = () => {
                 <form id="newTaskForm" onSubmit={submitTask}>
                     <Stack spacing={2}>
                         <Typography variant="h5" component="div">
-                            {'Add new task'}
+                            {'Modifying task #'}
+                            {selectedTaskId}
                         </Typography>
                         <FormControl component="fieldset">
                             <TextField
@@ -86,8 +87,12 @@ const AddTaskModal: React.FC = () => {
                                 rows={3}
                             />
                         </FormControl>
+                        <Typography variant="h6" component="div">
+                            {'Tags'}
+                        </Typography>
+                        <TagSelectorFlexBox />
                         <Button variant="contained" type="submit">
-                            {'Add Task'}
+                            {'Update Task'}
                         </Button>
                     </Stack>
                 </form>
@@ -96,4 +101,4 @@ const AddTaskModal: React.FC = () => {
     );
 };
 
-export default AddTaskModal;
+export default EditTaskModal;

@@ -1,5 +1,6 @@
 import { addTaskAction } from '../../state/actions/taskActions';
 import { closeModal } from '../../state/actions/uiActions';
+import TagSelectorFlexBox from '../TagSelectorFlexBox';
 import { useAppSelector } from '../../state/hooks';
 import { Button, Modal, Paper, FormControl, Stack, TextField, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
@@ -15,12 +16,13 @@ const AddTaskModal: React.FC = () => {
         dispatch(closeModal());
         cleanFields();
     };
+    const selectedTags = useAppSelector((state: RootState) => state.tags.tagReducer.selectedTags);
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const submitTask = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        dispatch(addTaskAction(title, description));
+        dispatch(addTaskAction(title, description, selectedTags));
     };
 
     const cleanFields = (): void => {
@@ -67,6 +69,10 @@ const AddTaskModal: React.FC = () => {
                                 rows={3}
                             />
                         </FormControl>
+                        <Typography variant="h6" component="div">
+                            {'Tags'}
+                        </Typography>
+                        <TagSelectorFlexBox />
                         <Button variant="contained" type="submit">
                             {'Add Task'}
                         </Button>

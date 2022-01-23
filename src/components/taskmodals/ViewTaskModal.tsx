@@ -1,7 +1,7 @@
-import { closeModal } from '../../state/actions/uiActions';
+import { openModal, closeModal } from '../../state/actions/uiActions';
 import { useAppSelector } from '../../state/hooks';
 import TagFlexBox from '../TagFlexBox';
-import { updateTaskAction } from '../../state/actions/taskActions';
+import { updateTaskAction, selectTask } from '../../state/actions/taskActions';
 import { Button, Modal, Paper, Box, Stack, Chip, Typography, Divider, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -13,36 +13,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import type { RootState } from '../../state/store';
 import type { Task } from '../../state/types/taskTypes';
+import type { Tag } from '../../state/types/tagTypes';
 
 const ViewTaskModal: React.FC = () => {
     const dispatch = useDispatch();
-    const openModal = useAppSelector((state: RootState) => state.ui.uiReducer.openModal);
+    const openModalState = useAppSelector((state: RootState) => state.ui.uiReducer.openModal);
     const tasks = useAppSelector((state: RootState) => state.tasks.taskReducer.tasks);
     const selectedTaskId = useAppSelector((state: RootState) => state.tasks.taskReducer.selectedTask);
     const selectedTask = tasks.find((task: Task) => task.id == selectedTaskId);
     const user = useAppSelector((state: RootState) => state.user.userReducer.user);
     const handleClose = () => {
         dispatch(closeModal());
+        dispatch(selectTask(selectedTaskId));
+    };
+    const handleEditTask = () => {
+        dispatch(openModal('editTask'));
     };
     const handleSendToPending = () => {
-        dispatch(
-            updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 0, selectedTask.tags),
-        );
+        const tag_ids = selectedTask.tags.map((tag: Tag) => tag.id);
+        dispatch(updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 0, tag_ids));
     };
     const handleSendToInProgress = () => {
-        dispatch(
-            updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 1, selectedTask.tags),
-        );
+        const tag_ids = selectedTask.tags.map((tag: Tag) => tag.id);
+        dispatch(updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 1, tag_ids));
     };
     const handleSendToDone = () => {
-        dispatch(
-            updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 2, selectedTask.tags),
-        );
+        const tag_ids = selectedTask.tags.map((tag: Tag) => tag.id);
+        dispatch(updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 2, tag_ids));
     };
 
     return (
         <Modal
-            open={openModal == 'viewTask' ? true : false}
+            open={openModalState == 'viewTask' ? true : false}
             onClose={handleClose}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
@@ -61,7 +63,7 @@ const ViewTaskModal: React.FC = () => {
                         {user && selectedTask && (user.id == selectedTask.user_id || user.role == 1) && (
                             <Stack direction="row" spacing={1}>
                                 <Tooltip title="Edit the task">
-                                    <IconButton aria-label="edit the task">
+                                    <IconButton aria-label="edit the task" onClick={handleEditTask}>
                                         <EditIcon />
                                     </IconButton>
                                 </Tooltip>
@@ -99,7 +101,7 @@ const ViewTaskModal: React.FC = () => {
                         <Typography variant="subtitle2" component="div" pt={2} mb={1} noWrap={true}>
                             {'Tags:'}
                         </Typography>
-                        <TagFlexBox tags={selectedTask ? selectedTask.tags : []} />
+                        <TagFlexBox tags={selectedTask ? selectedTask.tags : []} padBottom={true} />
                     </Stack>
                 </Box>
             </Paper>

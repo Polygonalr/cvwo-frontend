@@ -4,10 +4,11 @@ import { useAppDispatch, useAppSelector } from '../state/hooks';
 import React from 'react';
 import Box from '@mui/material/Box';
 
-const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number }> = ({
+const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number; padBottom?: boolean }> = ({
     tags = [],
     showAll = false,
     mb = 0,
+    padBottom = false,
 }) => {
     const colors = useAppSelector((state) => state.tags.tagReducer.colors);
     const allTags = useAppSelector((state) => state.tags.tagReducer.tags);
@@ -19,6 +20,7 @@ const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number }> = (
                         color={colors.find((color: Color) => color.id == tag.color_id).hex}
                         key={tag.id}
                         label={tag.name}
+                        padBottom={padBottom}
                     />
                 ))}
             </Box>
@@ -32,6 +34,7 @@ const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number }> = (
                         color={colors.find((color: Color) => color.id == tag.color_id).hex}
                         key={tag.id}
                         label={tag.name}
+                        padBottom={padBottom}
                     />
                 ))}
             </Box>

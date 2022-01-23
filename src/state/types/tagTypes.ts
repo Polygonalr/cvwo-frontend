@@ -14,4 +14,5 @@ export interface TagState {
     colors: Color[];
     isLoading: boolean;
     fetched: boolean;
+    selectedTags: number[];
 }

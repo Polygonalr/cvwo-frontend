@@ -11,18 +11,34 @@ const getContrastYIQ = (hexcolor: string) => {
     return yiq >= 128 ? 'black' : 'white';
 };
 
-const TagChip: React.FC<{ color: string; label: string }> = ({ color, label }) => {
+const TagChip: React.FC<{ color: string; label: string; padBottom?: boolean }> = ({
+    color,
+    label,
+    padBottom = false,
+}) => {
     let textColor = 'black';
     if (/^#(?:[0-9a-fA-F]{3}){1,2}$/.test(color)) {
         textColor = getContrastYIQ(color);
     }
-    const StyleChip = withStyles({
-        root: {
-            backgroundColor: color,
-            color: textColor,
-            marginRight: '5px',
-        },
-    })(Chip);
+    let StyleChip;
+    if (padBottom) {
+        StyleChip = withStyles({
+            root: {
+                backgroundColor: color,
+                color: textColor,
+                marginRight: '5px',
+                marginBottom: '5px',
+            },
+        })(Chip);
+    } else {
+        StyleChip = withStyles({
+            root: {
+                backgroundColor: color,
+                color: textColor,
+                marginRight: '5px',
+            },
+        })(Chip);
+    }
 
     return <StyleChip label={label} size="small" />;
 };

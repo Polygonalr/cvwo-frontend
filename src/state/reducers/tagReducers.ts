@@ -11,6 +11,7 @@ const initialState: TagState = {
     ],
     isLoading: false,
     fetched: false,
+    selectedTags: [],
 };
 
 export const tagReducer = (state: TagState = initialState, action: any) => {
@@ -51,6 +52,12 @@ export const tagReducer = (state: TagState = initialState, action: any) => {
             return {
                 ...state,
                 isLoading: false,
+            };
+        }
+        case 'SET_SELECTED_TAGS': {
+            return {
+                ...state,
+                selectedTags: action.payload,
             };
         }
         default: {

@@ -2,7 +2,6 @@ import { closeModal, showSuccessSnackbar } from '../../state/actions/uiActions';
 import { addTagAction } from '../../state/actions/tagActions';
 import { useAppSelector } from '../../state/hooks';
 import TagFlexBox from '../TagFlexBox';
-import ColorRadio from '../chips/ColorRadio';
 import TagChip from '../chips/TagChip';
 import { Button, Modal, Paper, FormControl, Grid, TextField, Typography, Box } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';

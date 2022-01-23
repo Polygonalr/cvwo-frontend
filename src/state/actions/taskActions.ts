@@ -58,6 +58,7 @@ export const fetchTasksAction = (): ThunkAction<Promise<void>, RootState, unknow
 export const addTaskAction = (
     title: string,
     description: string,
+    tag_ids: number[],
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // Invoke API
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
@@ -66,7 +67,7 @@ export const addTaskAction = (
             return new Promise<void>((resolve) => {
                 dispatch(fetchTasksStart());
                 console.log('Adding task in progress');
-                client.addTask(accessToken, title, description).then((tasks) => {
+                client.addTask(accessToken, title, description, tag_ids).then((tasks) => {
                     // dispatch(fetchTaskSuccess(tasks));
                     dispatch(showSuccessSnackbar('Task added!'));
                     dispatch(fetchTasksAction());
@@ -87,7 +88,7 @@ export const updateTaskAction = (
     title: string,
     description: string,
     status: number,
-    tags: Tag[],
+    tag_ids: number[],
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // TODO - Implement the API in ruby first before coming back here
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
@@ -95,7 +96,6 @@ export const updateTaskAction = (
             const accessToken = localStorage.getItem('token') || '';
             return new Promise<void>((resolve) => {
                 console.log('Updating task in progress');
-                const tag_ids = tags.map((tag) => tag.id);
                 client.updateTask(accessToken, taskId, title, description, status, tag_ids).then((tasks) => {
                     // dispatch(fetchTaskSuccess(tasks));
                     dispatch(showSuccessSnackbar('Task updated!'));
