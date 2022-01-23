@@ -20,6 +20,7 @@ const ViewTaskModal: React.FC = () => {
     const tasks = useAppSelector((state: RootState) => state.tasks.taskReducer.tasks);
     const selectedTaskId = useAppSelector((state: RootState) => state.tasks.taskReducer.selectedTask);
     const selectedTask = tasks.find((task: Task) => task.id == selectedTaskId);
+    const user = useAppSelector((state: RootState) => state.user.userReducer.user);
     const handleClose = () => {
         dispatch(closeModal());
     };
@@ -57,34 +58,36 @@ const ViewTaskModal: React.FC = () => {
                     </Stack>
                     <Divider orientation="vertical" flexItem />
                     <Stack pl={2}>
-                        <Stack direction="row" spacing={1}>
-                            <Tooltip title="Edit the task">
-                                <IconButton aria-label="edit the task">
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>
-                            {selectedTask && selectedTask.status != 0 && (
-                                <Tooltip title="Mark as pending">
-                                    <IconButton aria-label="mark as pending" onClick={handleSendToPending}>
-                                        <PauseCircleOutlineIcon />
+                        {user && selectedTask && (user.id == selectedTask.user_id || user.role == 1) && (
+                            <Stack direction="row" spacing={1}>
+                                <Tooltip title="Edit the task">
+                                    <IconButton aria-label="edit the task">
+                                        <EditIcon />
                                     </IconButton>
                                 </Tooltip>
-                            )}
-                            {selectedTask && selectedTask.status != 1 && (
-                                <Tooltip title="Send to In Progress">
-                                    <IconButton aria-label="mark as in progress" onClick={handleSendToInProgress}>
-                                        <LoopIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                            {selectedTask && selectedTask.status != 2 && (
-                                <Tooltip title="Mark as done">
-                                    <IconButton aria-label="mark as done" onClick={handleSendToDone}>
-                                        <CheckBoxIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                        </Stack>
+                                {selectedTask && selectedTask.status != 0 && (
+                                    <Tooltip title="Mark as pending">
+                                        <IconButton aria-label="mark as pending" onClick={handleSendToPending}>
+                                            <PauseCircleOutlineIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                                {selectedTask && selectedTask.status != 1 && (
+                                    <Tooltip title="Send to In Progress">
+                                        <IconButton aria-label="mark as in progress" onClick={handleSendToInProgress}>
+                                            <LoopIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                                {selectedTask && selectedTask.status != 2 && (
+                                    <Tooltip title="Mark as done">
+                                        <IconButton aria-label="mark as done" onClick={handleSendToDone}>
+                                            <CheckBoxIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                            </Stack>
+                        )}
                         <Divider />
                         <Stack direction="row" spacing={1} mt={2} mb={2}>
                             <Typography variant="subtitle2" component="div" pt={0.5} noWrap={true}>
