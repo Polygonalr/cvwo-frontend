@@ -22,6 +22,10 @@ export default function ButtonAppBar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.reload();
+    };
     const dispatch = useAppDispatch();
 
     return (
@@ -83,7 +87,7 @@ export default function ButtonAppBar() {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>{'Logout'}</MenuItem>
+                            <MenuItem onClick={handleLogout}>{'Logout'}</MenuItem>
                         </Menu>
                     </div>
                 </Toolbar>
