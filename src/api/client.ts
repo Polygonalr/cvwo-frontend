@@ -40,6 +40,34 @@ export const fetchUserData = async (accessToken: string) => {
     return user;
 };
 
+export const createUser = async (
+    accessToken: string,
+    username: string,
+    name: string,
+    password: string,
+    role: number,
+) => {
+    const userData = {
+        user: {
+            username: username,
+            name: name,
+            password: password,
+            password_confirmation: password,
+            role: role,
+        },
+    };
+    console.log('API: Creating user');
+    const newUser = await fetch(API_URL + `/add_user`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(userData),
+    }).then((resp) => resp.json());
+    return newUser;
+};
+
 // ========================== TASKS ============================
 
 // TODO Implement this sort in backend instead
@@ -114,6 +142,23 @@ export const updateTask = async (
     });
 };
 
+export const deleteTask = async (accessToken: string, taskId: number) => {
+    console.log('API: Deleting task');
+    const taskData = {
+        task: {
+            id: taskId,
+        },
+    };
+    await fetch(API_URL + `/delete_task`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(taskData),
+    });
+};
+
 // ========================== TAGS AND COLORS ============================
 
 export const fetchTags = async (accessToken: string) => {
@@ -145,6 +190,21 @@ export const addTag = async (accessToken: string, name: string, color: number) =
         body: JSON.stringify(tagData),
     }).then((resp) => resp.json());
     return new_tag.id;
+};
+
+export const deleteTag = async (accessToken: string, tagId: number) => {
+    console.log('API: Deleting tag');
+    const tagData = {
+        id: tagId,
+    };
+    await fetch(API_URL + `/remove_tag`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(tagData),
+    });
 };
 
 export const fetchColors = async (accessToken: string) => {

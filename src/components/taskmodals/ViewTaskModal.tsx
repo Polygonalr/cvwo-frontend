@@ -1,12 +1,13 @@
 import { openModal, closeModal } from '../../state/actions/uiActions';
 import { useAppSelector } from '../../state/hooks';
 import TagFlexBox from '../TagFlexBox';
-import { updateTaskAction, selectTask } from '../../state/actions/taskActions';
+import { updateTaskAction, selectTask, deleteTaskAction } from '../../state/actions/taskActions';
 import { Button, Modal, Paper, Box, Stack, Chip, Typography, Divider, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import LoopIcon from '@mui/icons-material/Loop';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -40,6 +41,11 @@ const ViewTaskModal: React.FC = () => {
     const handleSendToDone = () => {
         const tag_ids = selectedTask.tags.map((tag: Tag) => tag.id);
         dispatch(updateTaskAction(selectedTask.id, selectedTask.title, selectedTask.ddescription, 2, tag_ids));
+    };
+    const handleDeleteTask = () => {
+        if (confirm('Are you sure you want to delete this task?')) {
+            dispatch(deleteTaskAction(selectedTaskId));
+        }
     };
 
     return (
@@ -85,6 +91,13 @@ const ViewTaskModal: React.FC = () => {
                                     <Tooltip title="Mark as done">
                                         <IconButton aria-label="mark as done" onClick={handleSendToDone}>
                                             <CheckBoxIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                                {selectedTask && user && user.role == 1 && (
+                                    <Tooltip title="Delete the task">
+                                        <IconButton aria-label="delete the task" onClick={handleDeleteTask}>
+                                            <DeleteIcon />
                                         </IconButton>
                                     </Tooltip>
                                 )}

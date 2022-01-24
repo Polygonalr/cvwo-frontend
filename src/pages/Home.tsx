@@ -1,4 +1,5 @@
 import CategorisedList from '../components/CategorisedList';
+import CreateUserModal from '../components/CreateUserModal';
 import LoginModal from '../components/LoginModal';
 import LoadingModal from '../components/LoadingModal';
 import { fetchUserAction } from '../state/actions/userActions';
@@ -51,6 +52,7 @@ const Home: React.FC = () => {
                 <ButtonAppBar />
                 <CategorisedList />
                 {loginModal}
+                <CreateUserModal />
                 <LoadingModal />
             </div>
         </>

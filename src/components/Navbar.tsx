@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../state/hooks';
+import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { openModal } from '../state/actions/uiActions';
 
 import * as React from 'react';
@@ -16,11 +16,16 @@ import Menu from '@mui/material/Menu';
 
 export default function ButtonAppBar() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const userRole = useAppSelector((state) => state.user.userReducer.user.role);
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const handleCreateUser = () => {
+        setAnchorEl(null);
+        dispatch(openModal('createUser'));
     };
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -88,6 +93,8 @@ export default function ButtonAppBar() {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleLogout}>{'Logout'}</MenuItem>
+
+                            {userRole == 1 && <MenuItem onClick={handleCreateUser}>{'Create User'}</MenuItem>}
                         </Menu>
                     </div>
                 </Toolbar>

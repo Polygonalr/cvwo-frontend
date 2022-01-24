@@ -1,3 +1,5 @@
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import { deleteTagAction } from '../../state/actions/tagActions';
 import React from 'react';
 import Chip from '@mui/material/Chip';
 import { withStyles } from '@mui/styles';
@@ -11,11 +13,14 @@ const getContrastYIQ = (hexcolor: string) => {
     return yiq >= 128 ? 'black' : 'white';
 };
 
-const TagChip: React.FC<{ color: string; label: string; padBottom?: boolean }> = ({
+const TagChip: React.FC<{ color: string; label: string; padBottom?: boolean; tagId?: number }> = ({
     color,
     label,
     padBottom = false,
+    tagId = -1,
 }) => {
+    const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.user.userReducer.user);
     let textColor = 'black';
     if (/^#(?:[0-9a-fA-F]{3}){1,2}$/.test(color)) {
         textColor = getContrastYIQ(color);
@@ -39,7 +44,14 @@ const TagChip: React.FC<{ color: string; label: string; padBottom?: boolean }> =
             },
         })(Chip);
     }
-
+    const handleDelete = () => {
+        if (confirm('Are you sure you want to delete this tag?') && tagId != -1) {
+            dispatch(deleteTagAction(tagId));
+        }
+    };
+    if (user && user.role == 1 && tagId != -1) {
+        return <StyleChip label={label} size="small" onDelete={handleDelete} />;
+    }
     return <StyleChip label={label} size="small" />;
 };
 

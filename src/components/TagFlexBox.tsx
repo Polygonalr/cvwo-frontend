@@ -19,6 +19,7 @@ const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number; padBo
                     <TagChip
                         color={colors.find((color: Color) => color.id == tag.color_id).hex}
                         key={tag.id}
+                        tagId={tag.id}
                         label={tag.name}
                         padBottom={padBottom}
                     />

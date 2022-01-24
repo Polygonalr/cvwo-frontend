@@ -1,4 +1,4 @@
-import { showErrorSnackbar, showSuccessSnackbar } from './uiActions';
+import { showErrorSnackbar, showSuccessSnackbar, closeModal } from './uiActions';
 import { User } from '../types/userTypes';
 import * as client from '../../api/client';
 import { RootState } from '../../state/store';
@@ -75,6 +75,28 @@ export const submitCredentialsAction = (
                 resolve();
             });
         });
+    };
+};
+
+export const createUserAction = (
+    username: string,
+    name: string,
+    password: string,
+    role: number,
+): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
+        if (localStorage.getItem('token') !== null) {
+            if (getState().user.userReducer.user.role == 1) {
+                const accessToken = localStorage.getItem('token') || '';
+                return new Promise<void>((resolve) => {
+                    client.createUser(accessToken, username, name, password, role).then((userData) => {
+                        dispatch(showSuccessSnackbar('Successfully created user ' + userData.username + '!'));
+                        dispatch(closeModal());
+                        resolve();
+                    });
+                });
+            }
+        }
     };
 };
 

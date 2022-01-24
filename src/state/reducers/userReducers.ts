@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 
 const initialState: UserState = {
     user: {
+        id: -1,
         username: '',
         name: '',
         role: -1,

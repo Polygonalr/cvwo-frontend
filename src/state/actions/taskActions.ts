@@ -90,7 +90,6 @@ export const updateTaskAction = (
     status: number,
     tag_ids: number[],
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
-    // TODO - Implement the API in ruby first before coming back here
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
         if (localStorage.getItem('token') !== null) {
             const accessToken = localStorage.getItem('token') || '';
@@ -99,6 +98,28 @@ export const updateTaskAction = (
                 client.updateTask(accessToken, taskId, title, description, status, tag_ids).then((tasks) => {
                     // dispatch(fetchTaskSuccess(tasks));
                     dispatch(showSuccessSnackbar('Task updated!'));
+                    dispatch(fetchTasksAction());
+                    dispatch(closeModal());
+                    resolve();
+                });
+            });
+        } else {
+            return new Promise<void>((resolve) => {
+                resolve();
+            });
+        }
+    };
+};
+
+export const deleteTaskAction = (taskId: number): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
+        if (localStorage.getItem('token') !== null) {
+            const accessToken = localStorage.getItem('token') || '';
+            return new Promise<void>((resolve) => {
+                console.log('Deleting task in progress');
+                client.deleteTask(accessToken, taskId).then((tasks) => {
+                    // dispatch(fetchTaskSuccess(tasks));
+                    dispatch(showSuccessSnackbar('Task deleted!'));
                     dispatch(fetchTasksAction());
                     dispatch(closeModal());
                     resolve();

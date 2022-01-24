@@ -102,6 +102,27 @@ export const addTagAction = (
     };
 };
 
+export const deleteTagAction = (tagId: number): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
+    // Invoke API
+    return async (dispatch: AppDispatch, getState: () => RootState): Promise<void> => {
+        if (localStorage.getItem('token') !== null) {
+            const accessToken = localStorage.getItem('token') || '';
+            return new Promise<void>((resolve) => {
+                dispatch(fetchTagsStart());
+                client.deleteTag(accessToken, tagId).then((tags) => {
+                    dispatch(fetchTagsAction());
+                    dispatch(showSuccessSnackbar('Successfully deleted tag!'));
+                    resolve();
+                });
+            });
+        } else {
+            return new Promise<void>((resolve) => {
+                resolve();
+            });
+        }
+    };
+};
+
 export const fetchColorsAction = (): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // Invoke API
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {
