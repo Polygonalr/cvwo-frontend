@@ -41,6 +41,15 @@ export const setSelectedTags = (tags: number[]) => ({
     payload: tags,
 });
 
+export const setFilteredTag = (tagToFilter: number) => ({
+    type: 'SET_FILTERED_TAG',
+    payload: tagToFilter,
+});
+
+export const unsetFilteredTag = () => ({
+    type: 'UNSET_FILTERED_TAG',
+});
+
 export const fetchTagsAction = (): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {
     // Invoke API
     return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>, getState: () => RootState): Promise<void> => {

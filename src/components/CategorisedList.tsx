@@ -2,6 +2,7 @@ import AddTaskModal from './taskmodals/AddTaskModal';
 import EditTaskModal from './taskmodals/EditTaskModal';
 import ViewTaskModal from './taskmodals/ViewTaskModal';
 import ViewTagsModal from './taskmodals/ViewTagsModal';
+import TagRadioFlexBox from './TagRadioFlexBox';
 import TagFlexBox from './TagFlexBox';
 import { selectTask } from '../state/actions/taskActions';
 import { openModal } from '../state/actions/uiActions';
@@ -23,6 +24,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea, CardActions, Stack } from '@mui/material';
 
 import type { Task } from '../state/types/taskTypes';
+import type { Tag } from '../state/types/tagTypes';
 
 const CardGroup = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -35,7 +37,12 @@ const CardGroup = styled(Paper)(({ theme }) => ({
 const CardStack: React.FC<{ status: number }> = ({ status }) => {
     const dispatch = useDispatch();
     const tasks = useAppSelector((state) => state.tasks.taskReducer.tasks);
-    const filteredTasks = tasks.filter((task: Task) => task.status === status);
+    const selectedFilterTagId = useAppSelector((state) => state.tags.tagReducer.selectedFilterTag);
+    let filteredTasks = tasks.filter((task: Task) => task.status === status);
+    filteredTasks =
+        selectedFilterTagId == 0
+            ? filteredTasks
+            : filteredTasks.filter((task: Task) => task.tags.find((tag: Tag) => tag.id == selectedFilterTagId));
     const renderedTasks = filteredTasks.map((task: Task) => {
         const tag_ids = task.tags.map((tag) => tag.id);
         const openViewTaskModal = () => {
@@ -79,7 +86,8 @@ const CardStack: React.FC<{ status: number }> = ({ status }) => {
 const CategorisedList: React.FC = () => {
     return (
         <Container maxWidth="xl" style={{ height: '100%' }}>
-            <Box sx={{ flex: 1, height: '100%' }} mt={2}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }} mt={2}>
+                <TagRadioFlexBox />
                 <Grid container spacing={2} sx={{ minHeight: '100%' }}>
                     <Grid item xs={4}>
                         <CardGroup>

@@ -15,4 +15,5 @@ export interface TagState {
     isLoading: boolean;
     fetched: boolean;
     selectedTags: number[];
+    selectedFilterTag: number;
 }

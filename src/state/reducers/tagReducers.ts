@@ -12,6 +12,7 @@ const initialState: TagState = {
     isLoading: false,
     fetched: false,
     selectedTags: [],
+    selectedFilterTag: 0,
 };
 
 export const tagReducer = (state: TagState = initialState, action: any) => {
@@ -58,6 +59,18 @@ export const tagReducer = (state: TagState = initialState, action: any) => {
             return {
                 ...state,
                 selectedTags: action.payload,
+            };
+        }
+        case 'SET_FILTERED_TAG': {
+            return {
+                ...state,
+                selectedFilterTag: action.payload,
+            };
+        }
+        case 'UNSET_FILTERED_TAG': {
+            return {
+                ...state,
+                selectedFilterTag: 0,
             };
         }
         default: {

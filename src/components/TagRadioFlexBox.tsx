@@ -1,27 +1,24 @@
+import { setFilteredTag, unsetFilteredTag } from '../state/actions/tagActions';
 import { useAppSelector, useAppDispatch } from '../state/hooks';
 import { Tag, Color } from '../state/types/tagTypes';
-import { setSelectedTags } from '../state/actions/tagActions';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { withStyles } from '@mui/styles';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import React, { useState } from 'react';
+import React from 'react';
 
-const TagChipSelector: React.FC<{ tag: Tag }> = ({ tag }) => {
-    // TODO Fix the checkbox icon color and hover background color
+const TagChipRadio: React.FC<{ tag: Tag }> = ({ tag }) => {
     const dispatch = useAppDispatch();
     const colors = useAppSelector((state) => state.tags.tagReducer.colors);
     const tagColor = colors.length > 1 ? colors.find((color: Color) => color.id == tag.color_id).hex : 'white';
-    const selectedTags = useAppSelector((state) => state.tags.tagReducer.selectedTags);
-    const isSelected = useAppSelector((state) => state.tags.tagReducer.selectedTags.includes(tag.id));
+    const selectedFilterTag = useAppSelector((state) => state.tags.tagReducer.selectedFilterTag);
     const handleOnClick = () => {
-        let newSelectedTags = [...selectedTags];
-        if (isSelected) {
-            newSelectedTags = newSelectedTags.filter((id) => id != tag.id);
+        if (selectedFilterTag == tag.id) {
+            dispatch(unsetFilteredTag());
         } else {
-            newSelectedTags.push(tag.id);
+            dispatch(setFilteredTag(tag.id));
         }
-        dispatch(setSelectedTags(newSelectedTags));
     };
     const textColor = 'white';
     const StyleChip = withStyles({
@@ -34,7 +31,7 @@ const TagChipSelector: React.FC<{ tag: Tag }> = ({ tag }) => {
             color: 'white',
         },
     })(Chip);
-    if (isSelected) {
+    if (selectedFilterTag == tag.id) {
         return (
             <StyleChip icon={<CheckCircleIcon sx={{ color: 'white' }} />} label={tag.name} onClick={handleOnClick} />
         );
@@ -43,12 +40,19 @@ const TagChipSelector: React.FC<{ tag: Tag }> = ({ tag }) => {
     }
 };
 
-const TagSelectorFlexBox: React.FC = () => {
+const TagRadioFlexBox: React.FC = () => {
     const tags = useAppSelector((state) => state.tags.tagReducer.tags);
     const tagArray = tags.map((tag: Tag) => {
-        return <TagChipSelector tag={tag} key={tag.id} />;
+        return <TagChipRadio tag={tag} key={tag.id} />;
     });
-    return <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>{tagArray}</Box>;
+    return (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', marginBottom: '5px' }}>
+            <Typography variant="subtitle2" sx={{ paddingTop: '4px', paddingRight: '4px', color: 'gray' }}>
+                {'Filter by Tag: '}
+            </Typography>
+            {tagArray}
+        </Box>
+    );
 };
 
-export default TagSelectorFlexBox;
+export default TagRadioFlexBox;
