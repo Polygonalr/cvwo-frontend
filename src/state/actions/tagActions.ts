@@ -1,4 +1,5 @@
 import { showSuccessSnackbar, showErrorSnackbar } from './uiActions';
+import { fetchTasksAction } from './taskActions';
 import { Tag, Color } from '../types/tagTypes';
 import * as client from '../../api/client';
 import { RootState } from '../store';
@@ -125,6 +126,7 @@ export const deleteTagAction = (tagId: number): ThunkAction<Promise<void>, RootS
                 dispatch(fetchTagsStart());
                 client.deleteTag(accessToken, tagId).then((tags) => {
                     dispatch(fetchTagsAction());
+                    dispatch(fetchTasksAction());
                     dispatch(showSuccessSnackbar('Successfully deleted tag!'));
                     resolve();
                 });
