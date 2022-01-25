@@ -65,7 +65,11 @@ export const fetchTagsAction = (): ThunkAction<Promise<void>, RootState, unknown
                 dispatch(fetchTagsStart());
                 console.log('Fetching tags in progress');
                 client.fetchTags(accessToken).then((tags) => {
-                    dispatch(fetchTagsSuccess(tags));
+                    if (tags.message !== undefined) {
+                        dispatch(fetchTagsFailure(tags.message));
+                    } else {
+                        dispatch(fetchTagsSuccess(tags));
+                    }
                     resolve();
                 });
             });
@@ -138,7 +142,11 @@ export const fetchColorsAction = (): ThunkAction<Promise<void>, RootState, unkno
                 dispatch(fetchColorsStart());
                 console.log('Fetching colors in progress');
                 client.fetchColors(accessToken).then((colors) => {
-                    dispatch(fetchColorsSuccess(colors));
+                    if (colors.message !== undefined) {
+                        dispatch(fetchTagsFailure(colors.message));
+                    } else {
+                        dispatch(fetchColorsSuccess(colors));
+                    }
                     resolve();
                 });
             });

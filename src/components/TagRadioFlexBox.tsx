@@ -42,6 +42,16 @@ const TagChipRadio: React.FC<{ tag: Tag }> = ({ tag }) => {
 
 const TagRadioFlexBox: React.FC = () => {
     const tags = useAppSelector((state) => state.tags.tagReducer.tags);
+    if (tags == null || tags.length == 0) {
+        return (
+            <Typography
+                variant="subtitle2"
+                sx={{ paddingTop: '4px', paddingRight: '4px', color: 'gray', marginBottom: '5px' }}
+            >
+                {'No tags found. to filter!'}
+            </Typography>
+        );
+    }
     const tagArray = tags.map((tag: Tag) => {
         return <TagChipRadio tag={tag} key={tag.id} />;
     });

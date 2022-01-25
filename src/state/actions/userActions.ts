@@ -37,8 +37,14 @@ export const fetchUserAction = (): ThunkAction<Promise<void>, RootState, unknown
                 dispatch(fetchUserStart());
                 console.log('Fetching in progress');
                 client.fetchUserData(accessToken).then((userData) => {
-                    dispatch(fetchUserSuccess(userData));
-                    dispatch(showSuccessSnackbar('Automatically logged in as ' + userData.username + '!'));
+                    if (userData.message !== undefined) {
+                        dispatch(fetchUserFailure(userData.message));
+                        dispatch(showErrorSnackbar(userData.message));
+                        localStorage.removeItem('token');
+                    } else {
+                        dispatch(fetchUserSuccess(userData));
+                        dispatch(showSuccessSnackbar('Automatically logged in as ' + userData.username + '!'));
+                    }
                     resolve();
                 });
             });

@@ -43,7 +43,11 @@ export const fetchTasksAction = (): ThunkAction<Promise<void>, RootState, unknow
                 dispatch(fetchTasksStart());
                 console.log('Fetching tasks in progress');
                 client.fetchTasks(accessToken).then((tasks) => {
-                    dispatch(fetchTaskSuccess(tasks));
+                    if (tasks.message !== undefined) {
+                        dispatch(fetchTasksFailure(tasks.message));
+                    } else {
+                        dispatch(fetchTaskSuccess(tasks));
+                    }
                     resolve();
                 });
             });
