@@ -90,7 +90,9 @@ export const fetchTasks = async (accessToken: string) => {
             Authorization: `Bearer ${accessToken}`,
         },
     }).then((resp) => resp.json());
-    tasks.sort(compareTasks);
+    if (tasks.length > 1) {
+        tasks.sort(compareTasks);
+    }
     return tasks;
 };
 
