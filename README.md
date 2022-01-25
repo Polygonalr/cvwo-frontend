@@ -24,10 +24,18 @@ Installation is assumed to be done on a fresh copy of Ubuntu.
 
 * `serve -s build`
 
+## Some points to note
+
+* Only admins can delete tasks and tags.
+
+* Only admins can create users.
+
+* Only admins and user who owns the task can modify it (i.e. change title, description, assigned tags).
+
+* Any user can create tasks and tags.
+
 ## To do
 
 * Docker deployment.
-
-* Admin panel (to add new users and give them the ability to delete tags and tasks)
 
 * Many other small `// TODO`-s scattered around the codebase which are usually minor code cleanups or ui adjustments, that do not affect the functionality.
