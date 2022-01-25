@@ -27,7 +27,7 @@ const TagFlexBox: React.FC<{ tags?: Tag[]; showAll?: boolean; mb?: number; padBo
             </Box>
         );
     }
-    if (colors.length > 0) {
+    if (colors.length > 1) {
         return (
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }} mb={mb}>
                 {tags.map((tag: Tag) => (
