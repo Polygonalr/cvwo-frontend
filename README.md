@@ -39,3 +39,5 @@ Installation is assumed to be done on a fresh copy of Ubuntu.
 * Docker deployment.
 
 * Many other small `// TODO`-s scattered around the codebase which are usually minor code cleanups or ui adjustments, that do not affect the functionality.
+
+* Use .ENV for configurations instead
