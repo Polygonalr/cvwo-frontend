@@ -1,4 +1,4 @@
-import { showSuccessSnackbar } from './uiActions';
+import { showSuccessSnackbar, showErrorSnackbar } from './uiActions';
 import { Tag, Color } from '../types/tagTypes';
 import * as client from '../../api/client';
 import { RootState } from '../store';
@@ -89,15 +89,25 @@ export const addTagAction = (
     return async (dispatch: AppDispatch, getState: () => RootState): Promise<void> => {
         if (localStorage.getItem('token') !== null) {
             const accessToken = localStorage.getItem('token') || '';
-            return new Promise<void>((resolve) => {
-                dispatch(fetchTagsStart());
-                console.log('Adding tag in progress');
-                client.addTag(accessToken, name, color).then((tags) => {
-                    dispatch(fetchTagsAction());
-                    dispatch(showSuccessSnackbar('Successfully added tag!'));
+            // Check for duplicates
+            const tags = getState().tags.tagReducer.tags;
+            const duplicate = tags.find((tag: Tag) => tag.name === name);
+            if (duplicate !== undefined) {
+                dispatch(showErrorSnackbar('Tag already exists!'));
+                return new Promise<void>((resolve) => {
                     resolve();
                 });
-            });
+            } else {
+                return new Promise<void>((resolve) => {
+                    dispatch(fetchTagsStart());
+                    console.log('Adding tag in progress');
+                    client.addTag(accessToken, name, color).then((tags) => {
+                        dispatch(fetchTagsAction());
+                        dispatch(showSuccessSnackbar('Successfully added tag!'));
+                        resolve();
+                    });
+                });
+            }
         } else {
             return new Promise<void>((resolve) => {
                 resolve();

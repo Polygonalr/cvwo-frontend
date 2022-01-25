@@ -13,10 +13,11 @@ import { CirclePicker } from 'react-color';
 import type { RootState } from '../../state/store';
 import type { Tag, Color } from '../../state/types/tagTypes';
 
-const ViewTaskModal: React.FC = () => {
+const ViewTagsModal: React.FC = () => {
     const dispatch = useDispatch();
     const openModal = useAppSelector((state: RootState) => state.ui.uiReducer.openModal);
     const colors = useAppSelector((state: RootState) => state.tags.tagReducer.colors);
+    const tags = useSelector((state: RootState) => state.tags.tagReducer.tags);
     const hexColorList = colors.map((color: Color) => color.hex);
     const [selectedColor, setSelectedColor] = useState('#c03a3a');
     const [newTagName, setNewTagName] = useState('');
@@ -32,6 +33,10 @@ const ViewTaskModal: React.FC = () => {
             dispatch(addTagAction(newTagName, selectedColorId));
         }
         setNewTagName('');
+    };
+    const checkDuplicateTagNames = (): boolean => {
+        const tagNames = tags.map((tag: Tag) => tag.name);
+        return tagNames.includes(newTagName);
     };
 
     return (
@@ -58,6 +63,7 @@ const ViewTaskModal: React.FC = () => {
                             onChange={(e) => {
                                 setNewTagName(e.target.value);
                             }}
+                            error={checkDuplicateTagNames()}
                             inputProps={{ maxLength: 16 }}
                         />
                     </Grid>
@@ -87,4 +93,4 @@ const ViewTaskModal: React.FC = () => {
     );
 };
 
-export default ViewTaskModal;
+export default ViewTagsModal;
