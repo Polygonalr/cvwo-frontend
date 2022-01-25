@@ -6,6 +6,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import LabelIcon from '@mui/icons-material/Label';
@@ -17,6 +18,7 @@ import Menu from '@mui/material/Menu';
 export default function ButtonAppBar() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const userRole = useAppSelector((state) => state.user.userReducer.user.role);
+    const userName = useAppSelector((state) => state.user.userReducer.user.name);
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -37,30 +39,34 @@ export default function ButtonAppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                        onClick={() => {
-                            dispatch(openModal('addTask'));
-                        }}
-                    >
-                        <AddBoxIcon />
-                    </IconButton>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                        onClick={() => {
-                            dispatch(openModal('viewTags'));
-                        }}
-                    >
-                        <LabelIcon />
-                    </IconButton>
+                    <Tooltip title="Add a new Task">
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                            onClick={() => {
+                                dispatch(openModal('addTask'));
+                            }}
+                        >
+                            <AddBoxIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Open tag menu">
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                            onClick={() => {
+                                dispatch(openModal('viewTags'));
+                            }}
+                        >
+                            <LabelIcon />
+                        </IconButton>
+                    </Tooltip>
 
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         {'Task Management System'}
@@ -92,9 +98,9 @@ export default function ButtonAppBar() {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleLogout}>{'Logout'}</MenuItem>
-
+                            <MenuItem onClick={handleClose}>{'Logged in as: ' + userName}</MenuItem>
                             {userRole == 1 && <MenuItem onClick={handleCreateUser}>{'Create User'}</MenuItem>}
+                            <MenuItem onClick={handleLogout}>{'Logout'}</MenuItem>
                         </Menu>
                     </div>
                 </Toolbar>
