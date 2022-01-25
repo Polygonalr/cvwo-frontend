@@ -48,7 +48,7 @@ const TagRadioFlexBox: React.FC = () => {
                 variant="subtitle2"
                 sx={{ paddingTop: '4px', paddingRight: '4px', color: 'gray', marginBottom: '5px' }}
             >
-                {'No tags found. to filter!'}
+                {'No tags found to filter!'}
             </Typography>
         );
     }
