@@ -6,8 +6,6 @@
 
 <h3 align="center"><i>Task Management System frontend server in Typescripted ReactJS with Redux (not my best!)</i></h3>
 
-<p align="center"><a href="https://cvwo.ayzh.website">Click here to view the demo!</a></p>
-
 ## Requirements
 
 * node >= 12.0.0
