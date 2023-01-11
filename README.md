@@ -1,3 +1,5 @@
+<i>This project is to be re-written to suit my own needs more. Take a look at the <a href="https://github.com/Polygonalr/disorganized-api">new repo here.</href></i>
+
 <h1 align="center">
   Task Management System (CVWO)
 </h1>
